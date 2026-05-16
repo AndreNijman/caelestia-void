@@ -1,0 +1,11 @@
+# Caelestia power menu — "Boot into Windows" button.
+#
+# Lets the desktop user arm EFI BootNext for Windows and reboot without a
+# password prompt. The helper is root-owned, not user-writable, and does
+# nothing but set BootNext + reboot — see /usr/local/bin/caelestia-boot-windows.
+#
+# Deploy: install as /etc/sudoers.d/caelestia-boot-windows, mode 0440,
+# root-owned. Validate with: visudo -cf /etc/sudoers.d/caelestia-boot-windows
+#
+# Replace "andre" with your username if different.
+andre ALL=(root) NOPASSWD: /usr/local/bin/caelestia-boot-windows

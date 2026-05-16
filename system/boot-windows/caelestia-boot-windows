@@ -1,0 +1,33 @@
+#!/bin/sh
+# caelestia-boot-windows — one-shot reboot into Windows.
+#
+# Sets the EFI BootNext variable to the "Windows Boot Manager" entry, then
+# reboots. BootNext is consumed by the firmware after exactly one boot, so
+# the boot *after* Windows returns to Void automatically — this never
+# changes the permanent BootOrder.
+#
+# Backs the "Boot into Windows" button in the Caelestia power menu. Invoked
+# as:  sudo -n /usr/local/bin/caelestia-boot-windows
+# via the NOPASSWD rule in /etc/sudoers.d/caelestia-boot-windows.
+#
+#   caelestia-boot-windows             arm BootNext + reboot now
+#   caelestia-boot-windows --dry-run   print what would happen, change nothing
+#
+# Deploy: install root-owned, mode 0755, at /usr/local/bin/ (see SETUP.md).
+set -eu
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+
+[ "$(id -u)" -eq 0 ] || { echo "caelestia-boot-windows: must run as root" >&2; exit 1; }
+
+# Resolve the Windows entry dynamically — entry numbers are not guaranteed
+# stable across firmware changes, so never hardcode Boot0000.
+entry=$(efibootmgr | sed -n 's/^Boot\([0-9A-Fa-f]\{4\}\)\*\{0,1\} Windows Boot Manager.*/\1/p' | head -n1)
+[ -n "$entry" ] || { echo "caelestia-boot-windows: no 'Windows Boot Manager' EFI entry found" >&2; exit 1; }
+
+if [ "${1:-}" = "--dry-run" ]; then
+    echo "[dry-run] would set EFI BootNext=$entry, then reboot"
+    exit 0
+fi
+
+efibootmgr -n "$entry" >/dev/null
+exec reboot

@@ -200,6 +200,50 @@ Set in `config/caelestia/hypr-vars.conf` / `hypr-user.conf` / `cli.json` /
 
 ---
 
+## 11. Power menu — Boot into Windows button
+
+The Caelestia power menu (`modules/session/`) has a custom **Boot into
+Windows** button — a one-shot reboot into the Windows install that never
+touches the permanent EFI `BootOrder`.
+
+**How it works.** A small root helper sets the EFI `BootNext` variable to
+the "Windows Boot Manager" entry, then reboots. `BootNext` is consumed by
+the firmware after exactly one boot, so the boot *after* Windows returns to
+Void automatically. The button runs the helper through a NOPASSWD `sudo`
+rule, so it's a single click with no password prompt.
+
+| Repo file | Deploys to |
+|-----------|------------|
+| `shell/modules/session/Content.qml` | `/etc/xdg/quickshell/caelestia/modules/session/Content.qml` |
+| `system/boot-windows/caelestia-boot-windows` | `/usr/local/bin/caelestia-boot-windows` (root, `0755`) |
+| `system/boot-windows/caelestia-boot-windows.sudoers` | `/etc/sudoers.d/caelestia-boot-windows` (root, `0440`) |
+
+Deploy:
+
+```sh
+sudo install -m 0755 -o root -g root \
+    system/boot-windows/caelestia-boot-windows /usr/local/bin/caelestia-boot-windows
+sudo install -m 0440 -o root -g root \
+    system/boot-windows/caelestia-boot-windows.sudoers /etc/sudoers.d/caelestia-boot-windows
+sudo visudo -c                                       # sanity-check sudoers
+sudo cp shell/modules/session/Content.qml \
+    /etc/xdg/quickshell/caelestia/modules/session/Content.qml
+caelestia shell -k && caelestia shell -d             # restart the shell
+```
+
+Test the helper without rebooting:
+
+```sh
+sudo -n /usr/local/bin/caelestia-boot-windows --dry-run
+```
+
+> `shell/modules/session/Content.qml` is the **first vendored shell
+> modification** in this repo — a patched copy of the upstream
+> `caelestia-dots/shell` module. The `loginctl` power-action patches from
+> §5 are documented but not yet vendored here.
+
+---
+
 ## Deploying this repo
 
 ```sh

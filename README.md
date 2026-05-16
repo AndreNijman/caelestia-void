@@ -12,11 +12,13 @@ for Void was built from source and patched to compile with Void's GCC 14.
 | Path | What it is |
 |------|------------|
 | `caelestia/` | The Caelestia dotfiles (my modified fork) → deploy to `~/.local/share/caelestia` |
+| `shell/` | Patched Caelestia Quickshell modules (vendored) — the power menu with the **Boot into Windows** button |
 | `config/caelestia/` | Personal overrides → `~/.config/caelestia/` (`hypr-user.conf`, `hypr-vars.conf`, `cli.json`, `shell.json`) |
 | `config/gtk-3.0`, `config/gtk-4.0` | Dark-mode GTK settings |
 | `config/qt5ct`, `config/qt6ct` | Qt dark-mode settings |
 | `config/mimeapps.list` | Default apps (browser, file manager) |
 | `system/sing-box/` | sing-box VPN config (**credentials sanitized** — fill in your own) |
+| `system/boot-windows/` | "Boot into Windows" helper + sudoers rule for the power-menu button |
 | `void-build/` | The GCC 14 / C++26 compatibility shim used to build Hyprland |
 | `SETUP.md` | Full guide — how the whole thing was built and adapted for Void |
 
