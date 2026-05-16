@@ -1,0 +1,57 @@
+{
+    "appearance": {
+        "anim": {
+            "durations": {
+                "scale": 0.5491312966417911
+            }
+        },
+        "font": {
+            "family": {
+                "sans": "Rubik"
+            }
+        },
+        "padding": {
+            "scale": 0.9744344682835822
+        },
+        "rounding": {
+            "scale": 1.015974813432836
+        },
+        "spacing": {
+            "scale": 0.47682236140724943
+        },
+        "transparency": {
+            "enabled": false
+        }
+    },
+    "background": {
+        "desktopClock": {
+            "background": {
+                "blur": true
+            },
+            "shadow": {
+                "enabled": false
+            }
+        },
+        "visualiser": {
+            "autoHide": false,
+            "enabled": false
+        }
+    },
+    "bar": {
+        "status": {
+            "showKbLayout": false
+        }
+    },
+    "border": {
+        "rounding": 0,
+        "thickness": 0
+    },
+    "launcher": {
+        "enableDangerousActions": true,
+        "showOnHover": false,
+        "vimKeybinds": true
+    },
+    "services": {
+        "gpuType": "generic"
+    }
+}
