@@ -244,6 +244,30 @@ sudo -n /usr/local/bin/caelestia-boot-windows --dry-run
 
 ---
 
+## 12. Custom colour schemes
+
+Two custom Caelestia schemes live in `config/caelestia/schemes/`:
+
+- **goldnight** — shadotheme with the background lifted to `#1a1b1e` and the
+  accent recoloured to gold `#f5c518`. The whole neutral/surface ramp is
+  shifted uniformly by the background delta so panel depth is preserved.
+- **ember** — a port of the `ember` Hyprland shell's palette (Quickshell + Go,
+  `aqs`): a cool monochrome ink ramp (`#0e0f11`…`#e8eaec`) with a single warm
+  amber accent `#f2a33c`, taken straight from its `qml/Theme/Tokens.qml`.
+
+`install.sh` copies them into caelestia-cli's bundled `data/schemes/` dir, so
+they appear in `caelestia scheme set` and the shell's scheme picker:
+
+```sh
+caelestia scheme set -n goldnight -f default -m dark
+caelestia scheme set -n ember     -f default -m dark
+```
+
+> A `caelestia-cli` upgrade wipes the package's `data/schemes/` dir — rerun
+> `install.sh` to reinstall the custom schemes.
+
+---
+
 ## Deploying this repo
 
 ```sh
