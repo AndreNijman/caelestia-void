@@ -1,6 +1,8 @@
 // Patched copy of caelestia-dots/shell — modules/session/Content.qml
-// caelestia-void: adds the "Boot into Windows" SessionButton (last in the
-// column) — arms EFI BootNext via /usr/local/bin/caelestia-boot-windows.
+// caelestia-void modifications:
+//  - "Boot into Windows" SessionButton (last in the column) — arms EFI
+//    BootNext via /usr/local/bin/caelestia-boot-windows.
+//  - single-key shortcuts while the menu is open: l/s/h/r/w.
 pragma ComponentBehavior: Bound
 
 import QtQuick
@@ -17,6 +19,39 @@ Column {
 
     padding: Tokens.padding.large
     spacing: Tokens.spacing.large
+
+    // caelestia-void: single-key shortcuts while the power menu is open.
+    // l logout · s shutdown · h hibernate · r reboot · w Windows.
+    // Unhandled key events bubble up here from the focused SessionButton.
+    Keys.onPressed: event => {
+        if (event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier))
+            return;
+
+        let target = null;
+        switch (event.key) {
+        case Qt.Key_L:
+            target = logout;
+            break;
+        case Qt.Key_S:
+            target = shutdown;
+            break;
+        case Qt.Key_H:
+            target = hibernate;
+            break;
+        case Qt.Key_R:
+            target = reboot;
+            break;
+        case Qt.Key_W:
+            target = windows;
+            break;
+        }
+
+        if (target) {
+            target.forceActiveFocus();
+            Quickshell.execDetached(target.command);
+            event.accepted = true;
+        }
+    }
 
     SessionButton {
         id: logout
