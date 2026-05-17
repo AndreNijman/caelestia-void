@@ -237,10 +237,11 @@ Test the helper without rebooting:
 sudo -n /usr/local/bin/caelestia-boot-windows --dry-run
 ```
 
-> `shell/modules/session/Content.qml` is the **first vendored shell
-> modification** in this repo — a patched copy of the upstream
-> `caelestia-dots/shell` module. The `loginctl` power-action patches from
-> §5 are documented but not yet vendored here.
+> `shell/modules/session/Content.qml` is a vendored patch of the upstream
+> `caelestia-dots/shell` module (see also §13). `install.sh` mirrors
+> everything under `shell/` into `/etc/xdg/quickshell/caelestia/`, so the
+> manual `sudo cp` above is only needed for a one-off update. The
+> `loginctl` power-action patches from §5 are documented but not vendored.
 
 ---
 
@@ -265,6 +266,32 @@ caelestia scheme set -n ember     -f default -m dark
 
 > A `caelestia-cli` upgrade wipes the package's `data/schemes/` dir — rerun
 > `install.sh` to reinstall the custom schemes.
+
+---
+
+## 13. Control-centre — disable-touchpad-while-typing toggle
+
+A quick toggle in the control-centre "Quick Toggles" card flips Hyprland's
+`input:touchpad:disable_while_typing`.
+
+| Repo file | Deploys to |
+|-----------|------------|
+| `shell/modules/utilities/cards/Toggles.qml` | `/etc/xdg/quickshell/caelestia/modules/utilities/cards/Toggles.qml` |
+| `config/caelestia/hypr-dwt.conf` | `~/.config/caelestia/hypr-dwt.conf` (seeded only if absent) |
+
+**How it works.** `Toggles.qml` appends a synthetic `{id:"dwt"}` entry to
+its `quickToggles` getter (so no `shell.json` override is needed) plus a
+delegate with icon `do_not_touch`. Clicking it calls
+`Hypr.extras.applyOptions(...)` for the immediate runtime effect and
+rewrites `hypr-dwt.conf`.
+
+**Persistence.** `hypr-dwt.conf` holds `$touchpadDisableTyping = true|false`
+and is `source`d from `hypr-vars.conf`. Caelestia's `input.conf` already
+does `disable_while_typing = $touchpadDisableTyping`, and `hypr-vars.conf`
+is parsed after `variables.conf` but before `input.conf` — so the toggle's
+choice survives shell reloads, `hyprctl reload`, scheme changes and reboots.
+`hypr-dwt.conf` is a mutable runtime file: `install.sh` copies it (never
+symlinks) and only if it does not already exist.
 
 ---
 

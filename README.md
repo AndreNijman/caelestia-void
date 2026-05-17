@@ -12,8 +12,8 @@ for Void was built from source and patched to compile with Void's GCC 14.
 | Path | What it is |
 |------|------------|
 | `caelestia/` | The Caelestia dotfiles (my modified fork) → deploy to `~/.local/share/caelestia` |
-| `shell/` | Patched Caelestia Quickshell modules (vendored) — the power menu with the **Boot into Windows** button |
-| `config/caelestia/` | Personal overrides → `~/.config/caelestia/` (`hypr-user.conf`, `hypr-vars.conf`, `cli.json`, `shell.json`) |
+| `shell/` | Patched Caelestia Quickshell modules (vendored) — **Boot into Windows** power-menu button + **disable-touchpad-while-typing** quick toggle |
+| `config/caelestia/` | Personal overrides → `~/.config/caelestia/` (`hypr-user.conf`, `hypr-vars.conf`, `hypr-dwt.conf`, `cli.json`, `shell.json`) |
 | `config/caelestia/schemes/` | Custom colour schemes — `goldnight` (gold on `#1a1b1e`) and `ember` (amber-accent monochrome) |
 | `config/gtk-3.0`, `config/gtk-4.0` | Dark-mode GTK settings |
 | `config/qt5ct`, `config/qt6ct` | Qt dark-mode settings |
